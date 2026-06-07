@@ -1,278 +1,320 @@
-import { Dimensions, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Link } from 'expo-router';
+import { ScrollView, StyleSheet, View } from 'react-native';
 
-const { width } = Dimensions.get('window');
+import { ThemedText } from '@/components/themed-text';
+import { ThemedView } from '@/components/themed-view';
+import { IconSymbol } from '@/components/ui/icon-symbol';
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+
+const STACK = [
+  {
+    icon: 'iphone' as const,
+    title: 'Expo SDK 56',
+    description: 'React Native 0.85, React 19 e New Architecture ativa por padrão.',
+  },
+  {
+    icon: 'square.stack.3d.up.fill' as const,
+    title: 'Expo Router',
+    description: 'Navegação file-based com tabs, stack e modals prontos.',
+  },
+  {
+    icon: 'chevron.left.forwardslash.chevron.right' as const,
+    title: 'TypeScript 6',
+    description: 'Tipagem estática em todo o projeto, do roteamento aos hooks.',
+  },
+  {
+    icon: 'moon.fill' as const,
+    title: 'Tema adaptativo',
+    description: 'Suporte a light e dark mode com componentes temáticos.',
+  },
+];
+
+const STEPS = [
+  'Renomeie o app em app.json e package.json',
+  'Ajuste as cores em constants/theme.ts',
+  'Crie suas telas dentro de app/',
+];
 
 export default function HomeScreen() {
+  const colorScheme = useColorScheme();
+  const palette = Colors[colorScheme === 'dark' ? 'dark' : 'light'];
+
   return (
-    <ScrollView
-      style={styles.scrollView}
-      contentContainerStyle={styles.scrollContent}
-    >
-      <View style={styles.container}>
-        {/* Header com ícone */}
-        <View style={styles.headerContainer}>
-          <View style={styles.iconContainer}>
-            <Text style={styles.icon}>🚀</Text>
+    <ThemedView style={styles.screen}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}>
+        <View style={styles.hero}>
+          <View style={[styles.logo, { backgroundColor: `${palette.tint}18` }]}>
+            <IconSymbol name="chevron.left.forwardslash.chevron.right" size={32} color={palette.tint} />
           </View>
 
-          <View style={styles.titleContainer}>
-            <Text style={styles.title}>
-              React Native Template
-            </Text>
-            <Text style={styles.subtitle}>
-              Template moderno com Expo e TypeScript
-            </Text>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>⚡ Pronto para usar</Text>
-            </View>
-          </View>
-        </View>
+          <ThemedText type="title" style={styles.heroTitle}>
+            Template React Native
+          </ThemedText>
+          <ThemedText style={[styles.heroSubtitle, { color: palette.icon }]}>
+            Base pronta para apps Expo com TypeScript
+          </ThemedText>
 
-        {/* Card principal com recursos */}
-        <View style={styles.featuresCard}>
-          <View style={styles.featuresHeader}>
-            <Text style={styles.featuresIcon}>⚡</Text>
-            <Text style={styles.featuresTitle}>Recursos Incluídos</Text>
-          </View>
-
-          <View style={styles.featuresList}>
-            <View style={styles.featureItem}>
-              <View style={styles.featureIconContainer}>
-                <Text style={styles.featureIcon}>📱</Text>
-              </View>
-              <View style={styles.featureContent}>
-                <Text style={styles.featureTitle}>Expo SDK 51</Text>
-                <Text style={styles.featureDescription}>
-                  Framework React Native com ferramentas modernas
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.featureItem}>
-              <View style={styles.featureIconContainer}>
-                <Text style={styles.featureIcon}>🎨</Text>
-              </View>
-              <View style={styles.featureContent}>
-                <Text style={styles.featureTitle}>Componentes Temáticos</Text>
-                <Text style={styles.featureDescription}>
-                  Sistema de temas dark/light integrado
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.featureItem}>
-              <View style={styles.featureIconContainer}>
-                <Text style={styles.featureIcon}>🔧</Text>
-              </View>
-              <View style={styles.featureContent}>
-                <Text style={styles.featureTitle}>TypeScript</Text>
-                <Text style={styles.featureDescription}>
-                  Tipagem estática para maior segurança
-                </Text>
-              </View>
-            </View>
-
-            <View style={styles.featureItem}>
-              <View style={styles.featureIconContainer}>
-                <Text style={styles.featureIcon}>📐</Text>
-              </View>
-              <View style={styles.featureContent}>
-                <Text style={styles.featureTitle}>ESLint</Text>
-                <Text style={styles.featureDescription}>
-                  Qualidade de código com linting configurado
-                </Text>
-              </View>
-            </View>
+          <View style={[styles.metaRow, { borderColor: `${palette.icon}30` }]}>
+            <ThemedText style={[styles.metaLabel, { color: palette.icon }]}>SDK 56</ThemedText>
+            <View style={[styles.metaDivider, { backgroundColor: palette.icon }]} />
+            <ThemedText style={[styles.metaLabel, { color: palette.icon }]}>RN 0.85</ThemedText>
+            <View style={[styles.metaDivider, { backgroundColor: palette.icon }]} />
+            <ThemedText style={[styles.metaLabel, { color: palette.icon }]}>Router 56</ThemedText>
           </View>
         </View>
 
-        {/* Footer */}
+        <ThemedView
+          lightColor="#F8FAFC"
+          darkColor="#1A1D1F"
+          style={[styles.section, { borderColor: `${palette.icon}22` }]}>
+          <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+            Stack incluída
+          </ThemedText>
+
+          <View style={styles.stackList}>
+            {STACK.map((item) => (
+              <View key={item.title} style={styles.stackItem}>
+                <View style={[styles.stackIcon, { backgroundColor: `${palette.tint}14` }]}>
+                  <IconSymbol name={item.icon} size={20} color={palette.tint} />
+                </View>
+                <View style={styles.stackContent}>
+                  <ThemedText type="defaultSemiBold" style={styles.stackTitle}>
+                    {item.title}
+                  </ThemedText>
+                  <ThemedText style={[styles.stackDescription, { color: palette.icon }]}>
+                    {item.description}
+                  </ThemedText>
+                </View>
+              </View>
+            ))}
+          </View>
+        </ThemedView>
+
+        <ThemedView
+          lightColor="#F8FAFC"
+          darkColor="#1A1D1F"
+          style={[styles.section, { borderColor: `${palette.icon}22` }]}>
+          <ThemedText type="defaultSemiBold" style={styles.sectionTitle}>
+            Primeiros passos
+          </ThemedText>
+
+          <View style={styles.stepsList}>
+            {STEPS.map((step, index) => {
+              const isLast = index === STEPS.length - 1;
+
+              return (
+                <View key={step} style={styles.stepItem}>
+                  <View style={styles.stepTrack}>
+                    <View
+                      style={[
+                        styles.stepMarker,
+                        { borderColor: `${palette.tint}55` },
+                      ]}>
+                      <ThemedText style={[styles.stepMarkerText, { color: palette.tint }]}>
+                        {index + 1}
+                      </ThemedText>
+                    </View>
+                    {!isLast && (
+                      <View
+                        style={[styles.stepConnector, { backgroundColor: `${palette.icon}28` }]}
+                      />
+                    )}
+                  </View>
+                  <ThemedText style={styles.stepText}>{step}</ThemedText>
+                </View>
+              );
+            })}
+          </View>
+
+          <View style={[styles.guideDivider, { backgroundColor: `${palette.icon}18` }]} />
+
+          <Link href="/explore" style={styles.guideLink}>
+            <ThemedText type="link">Ver guia completo na aba Explorar</ThemedText>
+            <IconSymbol name="arrow.up.right.square" size={15} color={palette.tint} />
+          </Link>
+        </ThemedView>
+
         <View style={styles.footer}>
-          <Text style={styles.footerText}>
-            Comece desenvolvendo editando
-          </Text>
-          <Text style={styles.footerCode}>app/(tabs)/index.tsx</Text>
+          <ThemedText style={[styles.footerHint, { color: palette.icon }]}>
+            Edite esta tela em
+          </ThemedText>
+          <ThemedView
+            lightColor="#11181C"
+            darkColor="#ECEDEE"
+            style={styles.footerPath}>
+            <ThemedText
+              lightColor="#ECEDEE"
+              darkColor="#11181C"
+              style={styles.footerPathText}>
+              app/(tabs)/index.tsx
+            </ThemedText>
+          </ThemedView>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
+  screen: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
   },
   scrollContent: {
-    flexGrow: 1,
+    padding: 20,
+    paddingBottom: 32,
+    gap: 20,
   },
-  container: {
-    flex: 1,
+  hero: {
     alignItems: 'center',
-    justifyContent: 'flex-start',
-    padding: 16,
-    paddingTop: 20,
-    backgroundColor: '#F8FAFC',
+    paddingTop: 8,
+    gap: 10,
   },
-  headerContainer: {
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  iconContainer: {
-    width: 70,
-    height: 70,
-    borderRadius: 20,
-    backgroundColor: '#3B82F6',
+  logo: {
+    width: 64,
+    height: 64,
+    borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 20,
-    shadowColor: '#3B82F6',
-    shadowOffset: {
-      width: 0,
-      height: 8,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 16,
-    elevation: 12,
+    marginBottom: 4,
   },
-  icon: {
+  heroTitle: {
     fontSize: 28,
-  },
-  titleContainer: {
-    alignItems: 'center',
-    gap: 8,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '800',
+    lineHeight: 34,
     textAlign: 'center',
-    color: '#1E293B',
     letterSpacing: -0.5,
   },
-  subtitle: {
-    fontSize: 16,
+  heroSubtitle: {
+    fontSize: 15,
     textAlign: 'center',
-    color: '#64748B',
-    marginBottom: 12,
-    fontWeight: '500',
-    paddingHorizontal: 8,
+    lineHeight: 22,
+    maxWidth: 300,
   },
-  badge: {
-    backgroundColor: '#EEF2FF',
-    paddingHorizontal: 16,
+  metaRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 6,
+    paddingHorizontal: 14,
     paddingVertical: 8,
-    borderRadius: 24,
+    borderRadius: 999,
     borderWidth: 1,
-    borderColor: '#C7D2FE',
+    gap: 10,
   },
-  badgeText: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#4338CA',
+  metaLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    letterSpacing: 0.4,
+    textTransform: 'uppercase',
   },
-  featuresCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    padding: 20,
-    width: width - 32,
-    maxWidth: 400,
-    shadowColor: '#1E293B',
-    shadowOffset: {
-      width: 0,
-      height: 12,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 24,
-    elevation: 15,
-    marginBottom: 24,
+  metaDivider: {
+    width: 1,
+    height: 10,
+    opacity: 0.35,
+  },
+  section: {
+    borderRadius: 16,
     borderWidth: 1,
-    borderColor: '#F1F5F9',
+    padding: 18,
+    gap: 16,
   },
-  featuresHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-    gap: 8,
-  },
-  featuresIcon: {
-    fontSize: 24,
-  },
-  featuresTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#1E293B',
-    letterSpacing: -0.3,
-  },
-  featuresList: {
-    gap: 12,
-  },
-  featureItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-    padding: 16,
-    borderRadius: 14,
-    gap: 12,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-  },
-  featureIconContainer: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
-    backgroundColor: '#3B82F6',
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#3B82F6',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  featureIcon: {
-    fontSize: 18,
-  },
-  featureContent: {
-    flex: 1,
-    gap: 4,
-  },
-  featureTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#1E293B',
+  sectionTitle: {
+    fontSize: 17,
     letterSpacing: -0.2,
   },
-  featureDescription: {
+  stackList: {
+    gap: 14,
+  },
+  stackItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+  },
+  stackIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stackContent: {
+    flex: 1,
+    gap: 3,
+    paddingTop: 2,
+  },
+  stackTitle: {
+    fontSize: 15,
+    letterSpacing: -0.1,
+  },
+  stackDescription: {
     fontSize: 13,
-    color: '#64748B',
-    lineHeight: 18,
-    fontWeight: '500',
+    lineHeight: 19,
+  },
+  stepsList: {
+    gap: 0,
+    marginBottom: -14,
+  },
+  stepItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 14,
+    paddingBottom: 14,
+  },
+  stepTrack: {
+    alignItems: 'center',
+    width: 24,
+    paddingTop: 1,
+  },
+  stepMarker: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepMarkerText: {
+    fontSize: 11,
+    fontWeight: '700',
+    lineHeight: 13,
+  },
+  stepConnector: {
+    width: 1,
+    height: 18,
+    marginTop: 4,
+  },
+  stepText: {
+    flex: 1,
+    fontSize: 14,
+    lineHeight: 21,
+    paddingTop: 2,
+  },
+  guideDivider: {
+    height: 1,
+    marginTop: 4,
+  },
+  guideLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   footer: {
     alignItems: 'center',
     gap: 8,
-    marginTop: 16,
-    paddingBottom: 20,
+    marginTop: 4,
   },
-  footerText: {
-    fontSize: 14,
-    color: '#64748B',
-    textAlign: 'center',
-    fontWeight: '500',
+  footerHint: {
+    fontSize: 13,
   },
-  footerCode: {
+  footerPath: {
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 7,
+  },
+  footerPathText: {
     fontSize: 12,
-    fontFamily: 'Courier New',
-    backgroundColor: '#1E293B',
-    color: '#F1F5F9',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 6,
+    fontFamily: 'monospace',
     fontWeight: '600',
-    letterSpacing: 0.2,
   },
 });
